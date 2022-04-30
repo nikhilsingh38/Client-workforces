@@ -1,4 +1,4 @@
-
+import { useEffect } from "react";
 import './App.css';
 import { ToastContainer } from "react-toastify";
 import {BrowserRouter, Routes, Route} from "react-router-dom"
@@ -7,21 +7,32 @@ import Home from "./pages/Home"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
 import Header from './components/Header';
+import { useDispatch } from "react-redux";
+import {setUser} from "./redux/features/authSlice"
+import AddEditWorker from "./pages/AddEditWorker";
 
 function App() {
+  const dispatch = useDispatch();
+  const user = JSON.parse(localStorage.getItem("profile"));
+  useEffect(() => {
+    dispatch(setUser(user))
+  }, [])
+
   return (
     <BrowserRouter>
       <div className="App">
-        <Header/>
-      <ToastContainer />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
-    </div>
+        <Header />
+        <ToastContainer />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/addWorker" element={<AddEditWorker />} />
+          <Route path="/editWorker/:id" element={<AddEditWorker />} />
+        </Routes>
+      </div>
     </BrowserRouter>
-  )
+  );
 }
 
 export default App;
