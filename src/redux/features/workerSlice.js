@@ -66,12 +66,25 @@ export const updateWorker = createAsyncThunk(
   }
 );
 
+export const getWorkersByTag = createAsyncThunk(
+  "tour/getWorkersByTag",
+  async (tag, { rejectWithValue }) => {
+    try {
+      const response = await api.getTagWorkers(tag);
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
 const workerSlice = createSlice({
   name: "worker",
   initialState: {
     worker: {},
     workers: [],
     userWorkers: [],
+    tagWorkers: [],
     error: "",
     loading: false,
   },
@@ -138,11 +151,26 @@ const workerSlice = createSlice({
         arg: { id },
       } = action.meta;
       if (id) {
-        state.userWorkers = state.userWorkers.map((item) => item._id === id ? action.payload : item);
-        state.workers = state.workers.map((item) => item._id === id ? action.payload : item);
+        state.userWorkers = state.userWorkers.map((item) =>
+          item._id === id ? action.payload : item
+        );
+        state.workers = state.workers.map((item) =>
+          item._id === id ? action.payload : item
+        );
       }
     },
     [updateWorker.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    },
+    [getWorkersByTag.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [getWorkersByTag.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.tagTours = action.payload;
+    },
+    [getWorkersByTag.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     },

@@ -1,6 +1,11 @@
 import axios from "axios";
 
-const API = axios.create({ baseURL: "http://localhost:5000" });
+const devEnv = process.env.NODE_ENV !== "production";
+
+const { REACT_APP_DEV_API, REACT_APP_PROD_API } = process.env;
+
+
+const API = axios.create({ baseURL: `${devEnv ? REACT_APP_DEV_API : REACT_APP_PROD_API}` });
 
 API.interceptors.request.use((req) => {
   if (localStorage.getItem("profile")) {
@@ -22,3 +27,5 @@ export const updateWorker = (updatedWorkerData, id) =>
   API.patch(`/worker/${id}`, updatedWorkerData);
 
 export const getWorkersByUser = (userId) => API.get(`/worker/userWorkers/${userId}`); // id-> userid
+
+export const getTagWorkers = (tag) => API.get(`/worker/tag/${tag}`); // id-> userid

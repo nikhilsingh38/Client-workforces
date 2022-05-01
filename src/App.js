@@ -1,25 +1,26 @@
 import { useEffect } from "react";
-import './App.css';
+import "./App.css";
 import { ToastContainer } from "react-toastify";
-import {BrowserRouter, Routes, Route} from "react-router-dom"
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
-import Home from "./pages/Home"
-import Login from "./pages/Login"
-import Register from "./pages/Register"
-import Header from './components/Header';
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Header from "./components/Header";
 import { useDispatch } from "react-redux";
-import {setUser} from "./redux/features/authSlice"
+import { setUser } from "./redux/features/authSlice";
 import AddEditWorker from "./pages/AddEditWorker";
 import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./components/PrivateRoute";
 import NotFound from "./pages/NotFound";
+import TagWorkers from "./pages/TagWorkers";
 
 function App() {
   const dispatch = useDispatch();
   const user = JSON.parse(localStorage.getItem("profile"));
   useEffect(() => {
-    dispatch(setUser(user))
-  }, [])
+    dispatch(setUser(user));
+  }, []);
 
   return (
     <BrowserRouter>
@@ -30,6 +31,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/workers/tag/:tag" element={<TagWorkers />} />
           <Route
             path="/addWorker"
             element={
