@@ -10,6 +10,7 @@ import Header from './components/Header';
 import { useDispatch } from "react-redux";
 import {setUser} from "./redux/features/authSlice"
 import AddEditWorker from "./pages/AddEditWorker";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   const dispatch = useDispatch();
@@ -29,6 +30,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/addWorker" element={<AddEditWorker />} />
           <Route path="/editWorker/:id" element={<AddEditWorker />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </div>
     </BrowserRouter>

@@ -52,7 +52,7 @@ const Header = () => {
               <>
                 <MDBNavbarItem>
                   <MDBNavbarLink href="/addWorker">
-                    <p className="header-text">Add Worker</p>
+                    <p className="header-text">Add Task</p>
                   </MDBNavbarLink>
                 </MDBNavbarItem>
                 <MDBNavbarItem>

@@ -74,7 +74,7 @@ const AddEditWorker = () => {
       className="container"
     >
       <MDBCard alignment="center">
-        <h5>Add Worker</h5>
+        <h5>Add Tasks</h5>
         <MDBCardBody>
           <MDBValidation onSubmit={handleSubmit} noValidate className="row g-3">
             <div className="col-md-12">

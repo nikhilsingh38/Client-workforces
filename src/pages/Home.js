@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom"
 import { getWorkers } from "../redux/features/workerSlice";
 import CardWorker from '../components/CardWorker';
+import Spinner from '../components/Spinner';
 
 const Home = () => {
   const {workers, loading} = useSelector((state) => ({ ...state.worker}))
@@ -14,7 +15,7 @@ const Home = () => {
   }, []);
 
   if (loading) {
-    return <h2>Loading...</h2>
+    return <Spinner />;
   }
 
   return (

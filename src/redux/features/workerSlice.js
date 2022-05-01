@@ -27,6 +27,18 @@ export const getWorkers = createAsyncThunk(
   }
 );
 
+export const getWorkersByUser = createAsyncThunk(
+  "worker/getWorkersByUser",
+  async (userId, { rejectWithValue }) => {
+    try {
+      const response = await api.getWorkersByUser(userId);
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
 
 
 
@@ -60,6 +72,17 @@ const workerSlice = createSlice({
       state.workers = action.payload;
     },
     [getWorkers.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    },
+    [getWorkersByUser.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [getWorkersByUser.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.userWorkers = action.payload;
+    },
+    [getWorkersByUser.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     },

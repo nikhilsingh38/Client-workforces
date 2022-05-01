@@ -17,3 +17,5 @@ export const signUp = (formData) => API.post("/users/signup", formData);
 
 export const createWorker = (workerData) => API.post("/worker", workerData);
 export const getWorkers = () => API.get("/worker");
+
+export const getWorkersByUser = (userId) => API.get(`/worker/userWorkers/${userId}`); // id-> userid
