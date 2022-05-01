@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import {
   MDBCard,
   MDBCardBody,
+  MDBCardFooter,
   MDBValidation,
   MDBBtn,
   MDBInput,
+  MDBSpinner,
 } from "mdb-react-ui-kit";
 import ChipInput from "material-ui-chip-input";
 import FileBase from "react-file-base64";
@@ -21,25 +23,39 @@ const initialState = {
 
 const AddEditWorker = () => {
   const [workerData, setWorkerData] = useState(initialState);
-    const { error, loading } = useSelector((state) => ({ ...state.worker }));
-    const { user } = useSelector((state) => ({ ...state.auth }));
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-
+  const { error, loading, userWorkers } = useSelector((state) => ({
+    ...state.worker,
+  }));
+  const { user } = useSelector((state) => ({ ...state.auth }));
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { title, description, tags } = workerData;
+  const { id } = useParams();
+
+  useEffect(() => {
+    if (id) {
+      const singleWorker = userWorkers.find((worker) => worker._id === id);
+      setWorkerData({ ...singleWorker });
+    }
+  }, [id]);
 
   useEffect(() => {
     error && toast.error(error);
   }, [error]);
 
   const handleSubmit = (e) => {
-      e.preventDefault();
-      if (title && description && tags) {
-          const updatedWorkerData = { ...workerData, name: user?.result?.name };
-          dispatch(createWorker({ updatedWorkerData, navigate, toast }));
-          handleClear();
+    e.preventDefault();
+    if (title && description && tags) {
+      const updatedWorkerData = { ...workerData, name: user?.result?.name };
+      if (!id) {
+        dispatch(createWorker({ updatedWorkerData, navigate, toast }));
+      } else {
+        dispatch(updateWorker({ id, updatedWorkerData, toast, navigate }));
       }
+
+      handleClear();
+    }
   };
 
   const onInputChange = (e) => {
@@ -74,11 +90,11 @@ const AddEditWorker = () => {
       className="container"
     >
       <MDBCard alignment="center">
-        <h5>Add Tasks</h5>
+        <h5>{id ? "Update Task" : "Add Task"}</h5>
         <MDBCardBody>
           <MDBValidation onSubmit={handleSubmit} noValidate className="row g-3">
             <div className="col-md-12">
-              <input
+              <MDBInput
                 placeholder="Enter Title"
                 type="text"
                 value={title}
@@ -91,10 +107,11 @@ const AddEditWorker = () => {
               />
             </div>
             <div className="col-md-12">
-              <textarea
+              <MDBInput
                 placeholder="Enter Description"
                 type="text"
-                style={{ height: "100px" }}
+                textarea
+                rows={4}
                 value={description}
                 name="description"
                 onChange={onInputChange}
@@ -125,7 +142,9 @@ const AddEditWorker = () => {
               />
             </div>
             <div className="col-12">
-              <MDBBtn style={{ width: "100%" }}>Submit</MDBBtn>
+              <MDBBtn style={{ width: "100%" }}>
+                {id ? "Update" : "Submit"}
+              </MDBBtn>
               <MDBBtn
                 style={{ width: "100%" }}
                 className="mt-2"

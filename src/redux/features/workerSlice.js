@@ -39,8 +39,32 @@ export const getWorkersByUser = createAsyncThunk(
   }
 );
 
+export const deleteWorker = createAsyncThunk(
+  "worker/deleteTour",
+  async ({ id, toast }, { rejectWithValue }) => {
+    try {
+      const response = await api.deleteWorker(id);
+      toast.success("Task deleted Successfully");
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
 
-
+export const updateWorker = createAsyncThunk(
+  "worker/updateWorker",
+  async ({ id, updatedWorkerData, toast, navigate }, { rejectWithValue }) => {
+    try {
+      const response = await api.updateWorker(updatedWorkerData, id);
+      toast.success("Task Updated Successfully");
+      navigate("/");
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
 
 const workerSlice = createSlice({
   name: "worker",
@@ -83,6 +107,42 @@ const workerSlice = createSlice({
       state.userWorkers = action.payload;
     },
     [getWorkersByUser.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    },
+    [deleteWorker.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [deleteWorker.fulfilled]: (state, action) => {
+      state.loading = false;
+
+      const {
+        arg: { id },
+      } = action.meta;
+      if (id) {
+        state.userWorkers = state.userWorkers.filter((item) => item._id !== id);
+        state.workers = state.workers.filter((item) => item._id !== id);
+      }
+    },
+    [deleteWorker.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    },
+    [updateWorker.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [updateWorker.fulfilled]: (state, action) => {
+      state.loading = false;
+
+      const {
+        arg: { id },
+      } = action.meta;
+      if (id) {
+        state.userWorkers = state.userWorkers.map((item) => item._id === id ? action.payload : item);
+        state.workers = state.workers.map((item) => item._id === id ? action.payload : item);
+      }
+    },
+    [updateWorker.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     },

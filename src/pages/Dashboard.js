@@ -13,8 +13,9 @@ import {
 } from "mdb-react-ui-kit";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getWorkersByUser } from "../redux/features/workerSlice";
+import { deleteWorker, getWorkersByUser } from "../redux/features/workerSlice";
 import Spinner from "../components/Spinner";
+import {toast} from "react-toastify"
 
 const Dashboard = () => {
   const { user } = useSelector((state) => ({ ...state.auth }));
@@ -35,10 +36,16 @@ const Dashboard = () => {
       str = str.subString(0, 45) + " ...";
     }
     return str;
-    };
-    
-    if (loading) {
-        return <Spinner />;
+  };
+
+  if (loading) {
+    return <Spinner />;
+  }
+
+    const handleDelete = (id) => {
+        if (window.confirm("Are you sure you want to delete this task")) {
+          dispatch(deleteWorker({ id, toast }));
+        }
     }
 
   return (
@@ -92,6 +99,7 @@ const Dashboard = () => {
                           icon="trash"
                           style={{ color: "#dd4b39" }}
                           size="lg"
+                          onClick={() => handleDelete(item._id)}
                         />
                       </MDBBtn>
 
@@ -99,7 +107,7 @@ const Dashboard = () => {
                         <MDBIcon
                           fas
                           icon="edit"
-                          style={{ color: "#55acee" , marginLeft: "10px"}}
+                          style={{ color: "#55acee", marginLeft: "10px" }}
                           size="lg"
                         />
                       </Link>

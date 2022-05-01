@@ -17,5 +17,8 @@ export const signUp = (formData) => API.post("/users/signup", formData);
 
 export const createWorker = (workerData) => API.post("/worker", workerData);
 export const getWorkers = () => API.get("/worker");
+export const deleteWorker = (id) => API.delete(`/worker/${id}`);
+export const updateWorker = (updatedWorkerData, id) =>
+  API.patch(`/worker/${id}`, updatedWorkerData);
 
 export const getWorkersByUser = (userId) => API.get(`/worker/userWorkers/${userId}`); // id-> userid
