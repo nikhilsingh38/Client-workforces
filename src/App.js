@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import {setUser} from "./redux/features/authSlice"
 import AddEditWorker from "./pages/AddEditWorker";
 import Dashboard from "./pages/Dashboard";
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   const dispatch = useDispatch();
@@ -28,9 +29,30 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/addWorker" element={<AddEditWorker />} />
-          <Route path="/editWorker/:id" element={<AddEditWorker />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route
+            path="/addWorker"
+            element={
+              <PrivateRoute>
+                <AddEditWorker />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/editWorker/:id"
+            element={
+              <PrivateRoute>
+                <AddEditWorker />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </div>
     </BrowserRouter>
